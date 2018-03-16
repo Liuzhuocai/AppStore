@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">appstore</string>
+    <string name="install_fail_file_not_exist">Install Fail</string>
+</resources>
