@@ -1,4 +1,4 @@
-package com.elf.appstore;
+package com.acuteangle.appstore;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

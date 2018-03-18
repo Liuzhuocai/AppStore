@@ -1,4 +1,4 @@
-package com.elf.appstore;
+package com.acuteangle.appstore;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.elf.appstore.utils;
+package com.acuteangle.appstore.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;

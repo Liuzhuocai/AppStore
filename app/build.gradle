@@ -1,9 +1,17 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'com.mob.sdk'
 android {
+    signingConfigs {
+        debug {
+            keyAlias 'key0'
+            keyPassword '778899aA'
+            storeFile file('D:/sign/key/AppStore.jks')
+            storePassword '778899aa'
+        }
+    }
     compileSdkVersion 26
     defaultConfig {
-        applicationId "com.elf.appstore"
+        applicationId "com.acuteangle.appstore"
         minSdkVersion 15
         targetSdkVersion 26
         versionCode 1
@@ -15,15 +23,48 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            signingConfig signingConfigs.debug
+        }
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     //compile 'com.squareup.okhttp3:okhttp:3.10.0'
+}
+MobSDK {
+    appKey "24afb5d4a9ec8"
+    appSecret "276b806e2672c33b9ab6e2ac05c289af"
+
+    ShareSDK {
+        //平台配置信息
+        devInfo {
+            SinaWeibo {
+                appKey "568898243"
+                appSecret "38a4f8204cc784f81f9f0daaf31e02e3"
+                callbackUri "http://www.sharesdk.cn"
+                shareByAppClient false
+            }
+            Wechat {
+                appId "wx4868b35061f87885"
+                appSecret "64020361b8ec4c99936c0e3999a9f249"
+            }
+            QQ {
+                appId "100371282"
+                appKey "aed9b0303e3ed1e27bae87c33761161d"
+            }
+            Facebook {
+                appKey "1412473428822331"
+                appSecret "a42f4f3f867dc947b9ed6020c2e93558"
+                callbackUri "https://mob.com"
+            }
+        }
+    }
+
 }
