@@ -46,8 +46,8 @@ MobSDK {
         //平台配置信息
         devInfo {
             SinaWeibo {
-                appKey "568898243"
-                appSecret "38a4f8204cc784f81f9f0daaf31e02e3"
+                appKey "2525074849"
+                appSecret "328ba4ce6f3fc29e212e06d3cf876ef9"
                 callbackUri "http://www.sharesdk.cn"
                 shareByAppClient false
             }
@@ -56,12 +56,17 @@ MobSDK {
                 appSecret "64020361b8ec4c99936c0e3999a9f249"
             }
             QQ {
-                appId "100371282"
-                appKey "aed9b0303e3ed1e27bae87c33761161d"
+                appId "101468312"
+                appKey "8433ee1cf475881877b0918f00d82204"
             }
             Facebook {
-                appKey "1412473428822331"
-                appSecret "a42f4f3f867dc947b9ed6020c2e93558"
+                appKey "18607344110"
+                appSecret "acuteangle3662sanjiaoxing"
+                callbackUri "https://mob.com"
+            }
+            Twitter{
+                appKey "k3ANRSBDRGIgu3oRnfbMIeMQO"
+                appSecret "ZIwIWKUtGKTRew8sTxREJoKuCQGqptTS6JI4JMOfS3Y1omJoIx"
                 callbackUri "https://mob.com"
             }
         }

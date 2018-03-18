@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">appstore</string>
     <string name="install_fail_file_not_exist">Install Fail</string>
+    <string name="login_text">login</string>
+
+    <string name="opening_wechat">正在打开微信，请稍后...</string>
+    <string name="opening_qq">正在打开QQ，请稍后...</string>
+    <string name="opening_blog">正在打开微博，请稍后...</string>
+    <string name="opening_facebook">正在打开Facebook，请稍后...</string>
+    <string name="opening_twitter">正在打开twitter，请稍后...</string>
 </resources>
