@@ -1,11 +1,21 @@
 <resources>
     <string name="app_name">appstore</string>
     <string name="install_fail_file_not_exist">Install Fail</string>
-    <string name="login_text">login</string>
 
+
+    <!--Login -->
     <string name="opening_wechat">正在打开微信，请稍后...</string>
     <string name="opening_qq">正在打开QQ，请稍后...</string>
     <string name="opening_blog">正在打开微博，请稍后...</string>
     <string name="opening_facebook">正在打开Facebook，请稍后...</string>
     <string name="opening_twitter">正在打开twitter，请稍后...</string>
+    <string name="login_phone_num_hint">请输入手机号</string>
+    <string name="login_verification_num_hint">输入验证码</string>
+    <string name="login_title_login">登录账号</string>
+    <string name="login_title_login_account">账号密码登录</string>
+    <string name="login_find_pwd">找回密码</string>
+    <string name="login_sending_verification_num">发送验证码</string>
+    <string name="login_confirm">确认登录</string>
+    <string name="login_text">登录</string>
+    <string name="login_user_agreement">我已阅读并同意“用户协议”和“隐私政策”</string>
 </resources>

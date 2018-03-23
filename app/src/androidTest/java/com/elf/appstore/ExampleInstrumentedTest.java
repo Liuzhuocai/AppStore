@@ -1,4 +1,4 @@
-package com.acuteangle.appstore;
+package com.elf.appstore;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

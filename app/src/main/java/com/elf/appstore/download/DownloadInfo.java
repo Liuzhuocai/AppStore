@@ -1,4 +1,4 @@
-package com.acuteangle.appstore.download;
+package com.elf.appstore.download;
 
 import java.io.Serializable;
 

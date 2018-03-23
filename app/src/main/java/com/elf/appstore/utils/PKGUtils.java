@@ -1,4 +1,4 @@
-package com.acuteangle.appstore.utils;
+package com.elf.appstore.utils;
 
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.widget.Toast;
 
-import com.acuteangle.appstore.R;
+import com.elf.appstore.R;
 
 import java.io.File;
 
