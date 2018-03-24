@@ -16,6 +16,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.elf.appstore.R;
+import com.elf.appstore.account.ILoginView;
+import com.elf.appstore.account.LoginPresenter;
 import com.mob.tools.FakeActivity;
 import com.mob.tools.utils.ResHelper;
 
@@ -29,7 +32,6 @@ import cn.smssdk.SMSSDK;
 import cn.smssdk.UserInterruptException;
 import cn.smssdk.gui.CommonDialog;
 import cn.smssdk.gui.CountryPage;
-import cn.smssdk.gui.IdentifyNumPage;
 import cn.smssdk.gui.SmartVerifyPage;
 import cn.smssdk.gui.layout.SendMsgDialogLayout;
 import cn.smssdk.utils.SMSLog;
@@ -38,7 +40,7 @@ import cn.smssdk.utils.SMSLog;
  * Created by liuzuocai on 18-3-23.
  */
 
-public class MyRegisterPage extends FakeActivity implements View.OnClickListener, TextWatcher {
+public class MyRegisterPage extends FakeActivity implements View.OnClickListener, TextWatcher ,ILoginView {
     private static final String DEFAULT_COUNTRY_ID = "42";
     private EventHandler callback;
     private TextView tvCountry;
@@ -51,9 +53,26 @@ public class MyRegisterPage extends FakeActivity implements View.OnClickListener
     private EventHandler handler;
     private Dialog pd;
     private OnSendMessageHandler osmHandler;
+    private LoginPresenter mPresenter;
+
+    private ImageView ivWxLogin;
+    private ImageView ivQqLogin;
+    private ImageView ivBlog;
+    private ImageView ivFacebook;
+    private ImageView ivTwitter;
+
+
+    public static final int WECHATTYPE = 1;
+    public static final int QQTYPE = 2;
+    public static final int SINATYPE = 3;
+    public static final int FACEBOOKTYPE = 4;
+    public static final int TWITTERTYPE = 5;
 
     public MyRegisterPage() {
     }
+
+
+
 
     public void setRegisterCallback(EventHandler callback) {
         this.callback = callback;
@@ -68,11 +87,29 @@ public class MyRegisterPage extends FakeActivity implements View.OnClickListener
     }
 
     public void onCreate() {
+
+        initPresenter();
+        initView();
+
+
+    }
+
+    private void initView() {
+
+
+
         RegisterPageLayout page = new RegisterPageLayout(this.activity);
         LinearLayout layout = page.getLayout();
         if(layout != null) {
             this.activity.setContentView(layout);
             this.currentId = "42";
+
+            ivWxLogin = this.activity.findViewById(R.id.iv_wx_login);
+            ivQqLogin =  this.activity.findViewById(R.id.iv_qq_login);
+            ivBlog = this.activity.findViewById(R.id.iv_blog);
+            ivFacebook =  this.activity.findViewById(R.id.iv_facebook);
+            ivTwitter =  this.activity.findViewById(R.id.iv_twitter);
+
             View llBack = this.activity.findViewById(ResHelper.getIdRes(this.activity, "ll_back"));
             TextView tv = (TextView)this.activity.findViewById(ResHelper.getIdRes(this.activity, "tv_title"));
             int resId = ResHelper.getStringRes(this.activity, "smssdk_regist");
@@ -162,6 +199,11 @@ public class MyRegisterPage extends FakeActivity implements View.OnClickListener
             };
         }
 
+        ivWxLogin.setOnClickListener(this);
+        ivQqLogin.setOnClickListener(this);
+        ivBlog.setOnClickListener(this);
+        ivFacebook.setOnClickListener(this);
+        ivTwitter.setOnClickListener(this);
     }
 
     private String[] getCurrentCountry() {
@@ -234,11 +276,48 @@ public class MyRegisterPage extends FakeActivity implements View.OnClickListener
         } else if(id == idBtnNext) {
             String phone = this.etPhoneNum.getText().toString().trim().replaceAll("\\s*", "");
             String code = this.tvCountryNum.getText().toString().trim();
-            this.showDialog(phone, code);
+            //this.showDialog(phone, code);
+            nextPage(phone,code);
         } else if(id == idIvClear) {
             this.etPhoneNum.getText().clear();
         }
+        switch (id) {
+            case R.id.iv_wx_login:
+                mPresenter.authorize(WECHATTYPE);
+                break;
+            case R.id.iv_qq_login:
+                mPresenter.authorize(QQTYPE);
+                break;
+            case R.id.iv_blog:
+                mPresenter.authorize(SINATYPE);
+                break;
+            case R.id.iv_facebook:
+                mPresenter.authorize(FACEBOOKTYPE);
+                break;
+            case R.id.iv_twitter:
+                mPresenter.authorize(TWITTERTYPE);
+                break;
 
+            default:
+                break;
+        }
+
+    }
+
+    private void nextPage(String phone, String code) {
+
+        if(MyRegisterPage.this.pd != null && MyRegisterPage.this.pd.isShowing()) {
+            MyRegisterPage.this.pd.dismiss();
+        }
+
+        MyRegisterPage.this.pd = CommonDialog.ProgressDialog(MyRegisterPage.this.activity);
+        if(MyRegisterPage.this.pd != null) {
+            MyRegisterPage.this.pd.show();
+        }
+
+        SMSLog.getInstance().i("verification phone ==>>" + phone, new Object[0]);
+        SMSLog.getInstance().i("verification tempCode ==>>1319972", new Object[0]);
+        SMSSDK.getVerificationCode(code, phone.trim(), MyRegisterPage.this.osmHandler);
     }
 
     public void onResult(HashMap<String, Object> data) {
@@ -350,4 +429,27 @@ public class MyRegisterPage extends FakeActivity implements View.OnClickListener
 
     }
 
+    private void initPresenter() {
+        mPresenter = new LoginPresenter(this);
+    }
+
+    @Override
+    public void showWaitingDialog(int message) {
+
+    }
+
+    @Override
+    public void dismissWaitingDialog() {
+
+    }
+
+    @Override
+    public void showToast(String toastText) {
+        Toast.makeText(MyRegisterPage.this.activity, toastText, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showTips(String toastText) {
+
+    }
 }

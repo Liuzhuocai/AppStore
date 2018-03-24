@@ -71,8 +71,8 @@ public class TitleLayout {
         logoParams.rightMargin = SizeHelper.fromPx(14);
         ImageView backLogo = new ImageView(context);
         backLogo.setLayoutParams(logoParams);
-        res = ResHelper.getBitmapRes(context, "smssdk_sharesdk_icon");
-        backLogo.setBackgroundResource(res);
+//        res = ResHelper.getBitmapRes(context, "smssdk_sharesdk_icon");
+//        backLogo.setBackgroundResource(res);
         backLayout.addView(backArrow);
         backLayout.addView(backLogo);
         inLayout.addView(backLayout);

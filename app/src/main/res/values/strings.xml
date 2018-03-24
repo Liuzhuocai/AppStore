@@ -18,4 +18,7 @@
     <string name="login_confirm">确认登录</string>
     <string name="login_text">登录</string>
     <string name="login_user_agreement">我已阅读并同意“用户协议”和“隐私政策”</string>
+
+    <string name="login_verification_timer"><Data>&lt;font color=#209526>%s&lt;/font>秒后再次获取</Data></string>
+    <string name="login_verification_again">再次获取</string>
 </resources>
