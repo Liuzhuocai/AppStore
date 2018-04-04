@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="bottombar_height">48dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="banner_height">138dp</dimen>
+    <dimen name="category_height">43.33dp</dimen>
+    <dimen name="app_item_hight">80dp</dimen>
+    <dimen name="icon_width">56dp</dimen>
+    <dimen name="icon_hight">56dp</dimen>
+    <dimen name="bt_download_width">60dp</dimen>
+    <dimen name="bt_download_hight">30dp</dimen>
+ <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_horizontal_margin_bd">12dp</dimen>
+</resources>

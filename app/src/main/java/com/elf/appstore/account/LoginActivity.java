@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.elf.appstore.R;
 
-public class LoginActivity extends Activity implements View.OnClickListener ,ILoginView{
+public abstract class LoginActivity extends Activity implements View.OnClickListener ,ILoginView{
 
     private static final int MSG_ACTION_CCALLBACK = 0;
     private ImageView ivWxLogin;

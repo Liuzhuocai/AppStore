@@ -15,9 +15,9 @@ public abstract class BasePageLayout {
     Context context = null;
     LayoutInflater mLayoutInflater =null;
     public BasePageLayout(Context c, boolean isSearch) {
+        this.mLayoutInflater = LayoutInflater.from(c);
         this.context = c;
         this.layout = new LinearLayout(this.context);
-        mLayoutInflater = LayoutInflater.from(c);
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(-1, -1);
         this.layout.setLayoutParams(params);
         this.layout.setOrientation(LinearLayout.VERTICAL);

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
-import android.text.Html;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
@@ -18,7 +17,9 @@ import android.widget.Toast;
 
 import com.elf.appstore.R;
 import com.elf.appstore.account.ILoginView;
+import com.elf.appstore.account.LoginConfig;
 import com.elf.appstore.account.LoginPresenter;
+import com.elf.appstore.account.StringUtils;
 import com.mob.tools.FakeActivity;
 import com.mob.tools.utils.ResHelper;
 
@@ -32,9 +33,8 @@ import cn.smssdk.SMSSDK;
 import cn.smssdk.UserInterruptException;
 import cn.smssdk.gui.CommonDialog;
 import cn.smssdk.gui.CountryPage;
-import cn.smssdk.gui.SmartVerifyPage;
-import cn.smssdk.gui.layout.SendMsgDialogLayout;
 import cn.smssdk.utils.SMSLog;
+
 
 /**
  * Created by liuzuocai on 18-3-23.
@@ -55,11 +55,20 @@ public class MyRegisterPage extends FakeActivity implements View.OnClickListener
     private OnSendMessageHandler osmHandler;
     private LoginPresenter mPresenter;
 
+    private TitleType mTitleType = TitleType.LOGIN_PWD ;
+
+
     private ImageView ivWxLogin;
     private ImageView ivQqLogin;
     private ImageView ivBlog;
     private ImageView ivFacebook;
     private ImageView ivTwitter;
+
+    private TextView mLeftEnter;
+    private TextView mRightEnter;
+    //是否需要注册
+    private Boolean isFirstRegister = false;
+    private Boolean ingoreEvent = false;
 
 
     public static final int WECHATTYPE = 1;
@@ -68,6 +77,11 @@ public class MyRegisterPage extends FakeActivity implements View.OnClickListener
     public static final int FACEBOOKTYPE = 4;
     public static final int TWITTERTYPE = 5;
 
+    public   enum TitleType{
+     LOGIN_PWD , LOGIN_VERIFICATION ,//登录界面类型
+        VERIFICATION_LOGIN , VERIFICATION_REGISTER,VERIFICATION_RESET_PWD ,//验证码界面类型
+        PWD_LOGIN,PWD_SETUP,PWD_RESET,PWD_INPUT_AGAIN,//密码输入界面类型
+    }
     public MyRegisterPage() {
     }
 
@@ -90,8 +104,17 @@ public class MyRegisterPage extends FakeActivity implements View.OnClickListener
 
         initPresenter();
         initView();
+        initTitleType();
+    }
 
+    private void initTitleType() {
+        if(mTitleType==TitleType.LOGIN_VERIFICATION){
+            mRightEnter.setText(R.string.login_register_pwd_right);
+        }
+    }
 
+    public void setTitleType(TitleType type) {
+        this.mTitleType = type;
     }
 
     private void initView() {
@@ -109,6 +132,8 @@ public class MyRegisterPage extends FakeActivity implements View.OnClickListener
             ivBlog = this.activity.findViewById(R.id.iv_blog);
             ivFacebook =  this.activity.findViewById(R.id.iv_facebook);
             ivTwitter =  this.activity.findViewById(R.id.iv_twitter);
+            mLeftEnter =  this.activity.findViewById(R.id.login_register_enter_left);
+            mRightEnter =  this.activity.findViewById(R.id.login_register_enter_right);
 
             View llBack = this.activity.findViewById(ResHelper.getIdRes(this.activity, "ll_back"));
             TextView tv = (TextView)this.activity.findViewById(ResHelper.getIdRes(this.activity, "tv_title"));
@@ -144,6 +169,8 @@ public class MyRegisterPage extends FakeActivity implements View.OnClickListener
 
             this.ivClear = (ImageView)this.activity.findViewById(ResHelper.getIdRes(this.activity, "iv_clear"));
             llBack.setOnClickListener(this);
+            this.mLeftEnter.setOnClickListener(this);
+            this.mRightEnter.setOnClickListener(this);
             this.btnNext.setOnClickListener(this);
             this.ivClear.setOnClickListener(this);
             viewCountry.setOnClickListener(this);
@@ -156,10 +183,11 @@ public class MyRegisterPage extends FakeActivity implements View.OnClickListener
                             }
 
                             if(result == -1) {
-                                if(event == 2) {
+                                if(event == 2&&!ingoreEvent) {
                                     boolean smart = ((Boolean)data).booleanValue();
-                                    MyRegisterPage.this.afterVerificationCodeRequested(smart);
+                                    MyRegisterPage.this.afterVerificationCodeRequested(false);
                                 }
+                                ingoreEvent = false;
                             } else {
                                 if(event == 2 && data != null && data instanceof UserInterruptException) {
                                     return;
@@ -232,6 +260,10 @@ public class MyRegisterPage extends FakeActivity implements View.OnClickListener
     }
 
     public void onDestroy() {
+
+    }
+
+    public void onStop() {
         SMSSDK.unregisterEventHandler(this.handler);
     }
 
@@ -267,6 +299,8 @@ public class MyRegisterPage extends FakeActivity implements View.OnClickListener
         int idRlCountry = ResHelper.getIdRes(this.activity, "rl_country");
         int idBtnNext = ResHelper.getIdRes(this.activity, "btn_next");
         int idIvClear = ResHelper.getIdRes(this.activity, "iv_clear");
+        String phone = this.etPhoneNum.getText().toString().trim().replaceAll("\\s*", "");
+        String code = this.tvCountryNum.getText().toString().trim();
         if(id == idLlBack) {
             this.finish();
         } else if(id == idRlCountry) {
@@ -274,8 +308,6 @@ public class MyRegisterPage extends FakeActivity implements View.OnClickListener
             countryPage.setCountryId(this.currentId);
             countryPage.showForResult(this.activity, (Intent)null, this);
         } else if(id == idBtnNext) {
-            String phone = this.etPhoneNum.getText().toString().trim().replaceAll("\\s*", "");
-            String code = this.tvCountryNum.getText().toString().trim();
             //this.showDialog(phone, code);
             nextPage(phone,code);
         } else if(id == idIvClear) {
@@ -297,7 +329,22 @@ public class MyRegisterPage extends FakeActivity implements View.OnClickListener
             case R.id.iv_twitter:
                 mPresenter.authorize(TWITTERTYPE);
                 break;
+            case R.id.login_register_enter_left:
+                showDialog(phone,code,true);
+                break;
+            case R.id.login_register_enter_right:
+                MyRegisterPage page = new MyRegisterPage();
+                if(mTitleType==TitleType.LOGIN_VERIFICATION){
+                    page.setTitleType(TitleType.LOGIN_PWD);
+                    page.showForResult(this.activity, (Intent)null, this);
+                    finish();
+                }else {
+                    page.setTitleType(TitleType.LOGIN_VERIFICATION);
+                    page.showForResult(this.activity, (Intent)null, this);
+                    finish();
+                }
 
+                break;
             default:
                 break;
         }
@@ -305,19 +352,28 @@ public class MyRegisterPage extends FakeActivity implements View.OnClickListener
     }
 
     private void nextPage(String phone, String code) {
+        if(!StringUtils.isValidPhoneNumber(phone)){
+            showToast("请输入正确的手机号");
+            return;
+        }
 
         if(MyRegisterPage.this.pd != null && MyRegisterPage.this.pd.isShowing()) {
             MyRegisterPage.this.pd.dismiss();
         }
 
-        MyRegisterPage.this.pd = CommonDialog.ProgressDialog(MyRegisterPage.this.activity);
-        if(MyRegisterPage.this.pd != null) {
-            MyRegisterPage.this.pd.show();
-        }
+//        MyRegisterPage.this.pd = CommonDialog.ProgressDialog(MyRegisterPage.this.activity);
+//        if(MyRegisterPage.this.pd != null) {
+//            MyRegisterPage.this.pd.show();
+//        }
 
         SMSLog.getInstance().i("verification phone ==>>" + phone, new Object[0]);
         SMSLog.getInstance().i("verification tempCode ==>>1319972", new Object[0]);
-        SMSSDK.getVerificationCode(code, phone.trim(), MyRegisterPage.this.osmHandler);
+        if(mTitleType==TitleType.LOGIN_VERIFICATION){
+            SMSSDK.getVerificationCode(code, phone.trim(), MyRegisterPage.this.osmHandler);
+        }else {
+
+            afterVerificationCodeRequested(true);
+        }
     }
 
     public void onResult(HashMap<String, Object> data) {
@@ -346,6 +402,14 @@ public class MyRegisterPage extends FakeActivity implements View.OnClickListener
 
                     this.finish();
                 }
+            }else if(page==3||page==4){
+                Object pass = data.get("isPass");
+                Object notStartUI = data.get("notStartUI");
+                if(pass instanceof Boolean&&(boolean)pass){
+                    finish();
+                }else if(notStartUI instanceof Boolean&&(boolean)notStartUI){
+                    ingoreEvent = true;
+                }
             }
         }
 
@@ -364,23 +428,25 @@ public class MyRegisterPage extends FakeActivity implements View.OnClickListener
         return builder.toString();
     }
 
-    public void showDialog(final String phone, final String code) {
-        int resId = ResHelper.getStyleRes(this.activity, "CommonDialog");
+    public void showDialog(final String phone, final String code, boolean isRegister) {
+        int resId = ResHelper.getStyleRes(this.activity, "login_dialog");
         if(resId > 0) {
             String phoneNum = code + " " + this.splitPhoneNum(phone);
-            final Dialog dialog = new Dialog(this.getContext(), resId);
-            LinearLayout layout = SendMsgDialogLayout.create(this.getContext());
+            final Dialog dialog = new Dialog(this.getContext(),resId);
+            //LinearLayout layout = SendMsgDialogLayout.create(this.getContext());
+            View layout = this.activity.getLayoutInflater().inflate(R.layout.register_dialog, null);
             if(layout != null) {
                 dialog.setContentView(layout);
-                ((TextView)dialog.findViewById(ResHelper.getIdRes(this.activity, "tv_phone"))).setText(phoneNum);
-                TextView tv = (TextView)dialog.findViewById(ResHelper.getIdRes(this.activity, "tv_dialog_hint"));
-                resId = ResHelper.getStringRes(this.activity, "smssdk_make_sure_mobile_detail");
+                //((TextView)dialog.findViewById(ResHelper.getIdRes(this.activity, "tv_phone"))).setText(phoneNum);
+                TextView tv = dialog.findViewById(R.id.login_register_dialog_text);
+                resId = ResHelper.getStringRes(this.activity, "login_register_dialog_text");
                 if(resId > 0) {
-                    String text = this.getContext().getString(resId);
-                    tv.setText(Html.fromHtml(text));
+                    String text = this.getContext().getString(R.string.login_register_dialog_text,phoneNum);
+                    tv.setText(text);
+                    //tv.setText(Html.fromHtml(text));
                 }
 
-                ((Button)dialog.findViewById(ResHelper.getIdRes(this.activity, "btn_dialog_ok"))).setOnClickListener(new View.OnClickListener() {
+                (dialog.findViewById(ResHelper.getIdRes(this.activity, "login_register_dialog_ok"))).setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         dialog.dismiss();
                         if(MyRegisterPage.this.pd != null && MyRegisterPage.this.pd.isShowing()) {
@@ -394,10 +460,11 @@ public class MyRegisterPage extends FakeActivity implements View.OnClickListener
 
                         SMSLog.getInstance().i("verification phone ==>>" + phone, new Object[0]);
                         SMSLog.getInstance().i("verification tempCode ==>>1319972", new Object[0]);
+                        isFirstRegister = true;
                         SMSSDK.getVerificationCode(code, phone.trim(), MyRegisterPage.this.osmHandler);
                     }
                 });
-                ((Button)dialog.findViewById(ResHelper.getIdRes(this.activity, "btn_dialog_cancel"))).setOnClickListener(new View.OnClickListener() {
+                (dialog.findViewById(ResHelper.getIdRes(this.activity, "login_register_dialog_cancel"))).setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         dialog.dismiss();
                     }
@@ -409,24 +476,41 @@ public class MyRegisterPage extends FakeActivity implements View.OnClickListener
 
     }
 
-    private void afterVerificationCodeRequested(boolean smart) {
+    private void afterVerificationCodeRequested(boolean isPwd) {
         String phone = this.etPhoneNum.getText().toString().trim().replaceAll("\\s*", "");
         String code = this.tvCountryNum.getText().toString().trim();
-        if(code.startsWith("+")) {
+        if (code.startsWith("+")) {
             code = code.substring(1);
         }
-
         String formatedPhone = "+" + code + " " + this.splitPhoneNum(phone);
-        if(smart) {
-            SmartVerifyPage smartPage = new SmartVerifyPage();
-            smartPage.setPhone(phone, code, formatedPhone);
-            smartPage.showForResult(this.activity, (Intent)null, this);
-        } else {
-            IdentifyNumPage page = new IdentifyNumPage();
-            page.setPhone(phone, code, formatedPhone);
-            page.showForResult(this.activity, (Intent)null, this);
-        }
+        switch (mTitleType) {
+            case LOGIN_PWD:
+                if(isFirstRegister){
+                    IdentifyNumPage identifyNumPage = new IdentifyNumPage();
+                    identifyNumPage.setPhone(phone, code, formatedPhone,TitleType.VERIFICATION_REGISTER);
+                    identifyNumPage.showForResult(this.activity, (Intent) null, this);
+                    isFirstRegister = false;
+                }else {
+                    PasswordNumPage page = new PasswordNumPage();
+                    page.setPhone(phone, code, formatedPhone, TitleType.PWD_LOGIN, null);
+                    page.showForResult(this.activity, (Intent) null, this);
+                }
 
+                break;
+            case LOGIN_VERIFICATION:
+
+                IdentifyNumPage identifyNumPage = new IdentifyNumPage();
+                if(isFirstRegister){
+                    identifyNumPage.setPhone(phone, code, formatedPhone,TitleType.VERIFICATION_REGISTER);
+                    isFirstRegister = false;
+                }else {
+                    identifyNumPage.setPhone(phone, code, formatedPhone, TitleType.VERIFICATION_LOGIN);
+                }
+                identifyNumPage.showForResult(this.activity, (Intent) null, this);
+                break;
+            default:
+                break;
+        }
     }
 
     private void initPresenter() {
@@ -451,5 +535,17 @@ public class MyRegisterPage extends FakeActivity implements View.OnClickListener
     @Override
     public void showTips(String toastText) {
 
+    }
+
+    @Override
+    public void LoginSuccess(String platform) {
+        HashMap<String, Object> res = new HashMap();
+//        res.put("res", platform));
+//        res.put("page", Integer.valueOf(2));
+//        res.put("phone", data);
+//        setResult(res);
+        onActivityResult(0, LoginConfig.RESPONSE_LOGIN_SUCCESS,null);
+        sendResult();
+        finish();
     }
 }

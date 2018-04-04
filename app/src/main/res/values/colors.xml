@@ -3,4 +3,24 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="tab_unselect">#c9c9c9</color>
+    <color name="bg_btn">#dadada</color>
+ <color name="infoTextColor">#999999</color>
+    <color name="list_item_press">#f0f0f0</color>
+    <color name="transparent">#00000000</color>
+    <!--login -->
+    <color name="login_register_edit_title_color">#777777</color>
+    <color name="login_register_country_title_color">#2C2C2C</color>
+    <color name="login_register_edit_hint_color">#DFDFDF</color>
+    <color name="login_register_button_color">#F9FDFE</color>
+    <color name="login_verification_button_again">#999999</color>
+    <color name="login_verification_button_cutdown">#333333</color>
+
+
+
+    <color name="white">#ffffff</color>
+    <color name="secondaryTextColor">#999999</color>
+    <color name="disableHintTextColor">#61000000</color>
+    <color name="appPressedBgColor">#33000000</color>
 </resources>

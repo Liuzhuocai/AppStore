@@ -3,11 +3,13 @@ package com.elf.appstore.account.ui;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -62,13 +64,18 @@ public class IdentifyNumPage extends FakeActivity implements View.OnClickListene
     private int showDialogType = 1;
     private long lastRequestVVTime;
 
+    private MyRegisterPage.TitleType mTitleType = MyRegisterPage.TitleType.VERIFICATION_LOGIN;
+
+
     public IdentifyNumPage() {
     }
 
-    public void setPhone(String phone, String code, String formatedPhone) {
+    public void setPhone(String phone, String code, String formatedPhone, MyRegisterPage.TitleType titleType) {
+        Log.d("liuzuo","PasswordNumPage:"+Log.getStackTraceString(new Exception()));
         this.phone = phone;
         this.code = code;
         this.formatedPhone = formatedPhone;
+        this.mTitleType = titleType;
     }
 
     public void onCreate() {
@@ -372,7 +379,34 @@ public class IdentifyNumPage extends FakeActivity implements View.OnClickListene
         }
 
     }
-
+    public void showDialog(){
+        int resId = ResHelper.getStyleRes(this.activity, "login_dialog");
+        if(resId > 0) {
+            final Dialog dialog = new Dialog(this.getContext(),resId);
+            View layout = this.activity.getLayoutInflater().inflate(R.layout.login_success_dialog, null);
+            if(layout != null) {
+                dialog.setContentView(layout);
+                TextView tv = dialog.findViewById(R.id.login_success_dialog_title);
+                if (mTitleType == MyRegisterPage.TitleType.PWD_INPUT_AGAIN){
+                    tv.setText(R.string.login_register_dialog_success);
+                }
+                (dialog.findViewById(ResHelper.getIdRes(this.activity, "login_success_dialog_ok"))).setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        HashMap<String, Object> res = new HashMap();
+                        res.put("res", Boolean.valueOf(true));
+                        res.put("page", Integer.valueOf(2));
+                        //res.put("phone", data);
+                        setResult(res);
+                        sendResult();
+                        finish();
+                    }
+                });
+                dialog.setCanceledOnTouchOutside(true);
+                dialog.show();
+            }
+        }
+    }
     private void afterSubmit(final int result, final Object data) {
         this.runOnUIThread(new Runnable() {
             public void run() {
@@ -381,12 +415,12 @@ public class IdentifyNumPage extends FakeActivity implements View.OnClickListene
                 }
 
                 if(result == -1) {
-                    HashMap<String, Object> res = new HashMap();
-                    res.put("res", Boolean.valueOf(true));
-                    res.put("page", Integer.valueOf(2));
-                    res.put("phone", data);
-                    setResult(res);
-                    finish();
+                    if(mTitleType == MyRegisterPage.TitleType.VERIFICATION_REGISTER){
+                       showPasswordActivity();
+                    }else {
+                        showDialog();
+
+                    }
                 } else {
                     ((Throwable)data).printStackTrace();
                     String message = ((Throwable)data).getMessage();
@@ -411,6 +445,29 @@ public class IdentifyNumPage extends FakeActivity implements View.OnClickListene
 
             }
         });
+    }
+
+    @Override
+    public void onResult(HashMap<String, Object> data) {
+        int page = ((Integer)data.get("page")).intValue();
+        if(page==3||page==4) {
+            Object pass = data.get("isPass");
+            if (pass instanceof Boolean && (boolean) pass) {
+                HashMap<String, Object> res = new HashMap();
+                res.put("isPass", Boolean.valueOf(true));
+                res.put("page", Integer.valueOf(3));
+                setResult(res);
+                sendResult();
+                Log.d("liuzuo","setResult");
+                finish();
+            }
+        }
+    }
+
+    private void showPasswordActivity() {
+        PasswordNumPage page = new PasswordNumPage();
+        page.setPhone(phone, code, formatedPhone, MyRegisterPage.TitleType.PWD_SETUP, null);
+        page.showForResult(this.activity, (Intent) null, this);
     }
 
     private void afterGet(final int result, final Object data) {

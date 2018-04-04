@@ -10,4 +10,6 @@ public interface ILoginView {
 
     void showToast(String toastText);
     void showTips(String toastText);
+
+    void LoginSuccess(String platform);
 }

@@ -4,65 +4,90 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
 >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_alignParentBottom="true"
-        android:layout_centerVertical="true">
+        android:layout_centerVertical="true"
+        android:orientation="vertical"
+    >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/login_register_third_line"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp"
+        >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="@string/login_register_third_text"
+                android:textColor="@color/login_register_edit_title_color"
+                android:textSize="18sp"
+            />
+        </RelativeLayout>
+        <LinearLayout
+            android:id="@+id/login_register_third_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
 
-        <ImageView
-            android:id="@+id/iv_wx_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="10dp"
-            android:clickable="true"
-            android:src="@mipmap/wechat_icon"
-        />
+            <ImageView
+                android:id="@+id/iv_wx_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="10dp"
+                android:clickable="true"
+                android:src="@mipmap/wechat_icon"
+            />
 
-        <ImageView
-            android:id="@+id/iv_qq_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="10dp"
-            android:clickable="true"
-            android:src="@mipmap/qq_icon"
-        />
+            <ImageView
+                android:id="@+id/iv_qq_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:clickable="true"
+                android:src="@mipmap/qq_icon"
+            />
 
-        <ImageView
-            android:id="@+id/iv_blog"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="10dp"
-            android:clickable="true"
-            android:src="@mipmap/blog_icon"
-        />
-        <ImageView
-            android:id="@+id/iv_facebook"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="10dp"
-            android:clickable="true"
-            android:src="@mipmap/facebook_icon"
-        />
-        <ImageView
-            android:id="@+id/iv_twitter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="10dp"
-            android:clickable="true"
-            android:src="@mipmap/twitter_icon"
-        />
+            <ImageView
+                android:id="@+id/iv_blog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="20dp"
+                android:clickable="true"
+                android:src="@mipmap/blog_icon"
+            />
+            <ImageView
+                android:id="@+id/iv_facebook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="20dp"
+                android:clickable="true"
+                android:src="@mipmap/facebook_icon"
+            />
+            <ImageView
+                android:id="@+id/iv_twitter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="10dp"
+                android:clickable="true"
+                android:src="@mipmap/twitter_icon"
+            />
 
+        </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

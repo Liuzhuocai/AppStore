@@ -123,6 +123,8 @@ public class RegisterPageLayout extends BasePageLayout {
 
 
             View view = mLayoutInflater.inflate(R.layout.login_third_container, null);
+            View enterView = mLayoutInflater.inflate(R.layout.login_register_other_enter, null);
+            parent.addView(enterView);
             parent.addView(view);
         }
 }

@@ -5,14 +5,14 @@ android {
         debug {
             keyAlias 'key0'
             keyPassword '778899aA'
-            storeFile file('/home/liuzuocai/share/sign/key/AppStore.jks')
+            storeFile file('key/AppStore.jks')
             storePassword '778899aa'
         }
     }
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.acuteangle.appstore"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -27,16 +27,47 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support:design:26.1.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    //compile 'com.squareup.okhttp3:okhttp:3.10.0'
+    //OKHTTP
+    compile 'com.squareup.okhttp3:okhttp:3.10.0'
+    //RxJava
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    compile 'io.reactivex.rxjava2:rxjava:2.0.1'
+    //Gosn
+    compile 'com.google.code.gson:gson:2.6.2'
+    // appcompat-v7 is required
+    compile 'me.yokeyword:fragmentation:1.3.3'
+    // If you don't want to extends SupportActivity/Fragment and would like to customize your own support, just rely on fragmentation-core
+    compile 'me.yokeyword:fragmentation-core:1.3.3'
+    // To get SwipeBack feature, rely on both fragmentation & fragmentation-swipeback
+    // compile 'me.yokeyword:fragmentation:1.3.3'
+    // Swipeback is based on fragmentation. Refer to SwipeBackActivity/Fragment for your Customized SupportActivity/Fragment
+    compile 'me.yokeyword:fragmentation-swipeback:1.3.3'
+    // To simplify the communication between Fragments.
+    compile 'me.yokeyword:eventbus-activity-scope:1.1.0'
+    // Your EventBus's version
+    compile 'org.greenrobot:eventbus:3.0.0'
+    //LRecyclerView
+    compile 'com.github.jdsjlzx:LRecyclerView:1.5.0'
+    //Banner
+    compile 'com.youth.banner:banner:1.4.10'
+    //Piccasso
+    //implementation 'com.squareup.picasso:picasso:2.71828'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    //compile 'com.squareup.picasso:picasso:2.71828'
 }
 MobSDK {
     appKey "24afb5d4a9ec8"
@@ -66,7 +97,7 @@ MobSDK {
                 appSecret "fb558789761152007"
                 callbackUri "https://mob.com"
             }
-            Twitter{
+            Twitter {
                 appKey "k3ANRSBDRGIgu3oRnfbMIeMQO"
                 appSecret "ZIwIWKUtGKTRew8sTxREJoKuCQGqptTS6JI4JMOfS3Y1omJoIx"
                 callbackUri "https://mob.com"

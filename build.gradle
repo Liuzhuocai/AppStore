@@ -8,6 +8,10 @@ buildscript {
         maven {
             url "http://mvn.mob.com/android"
         }
+        maven {
+            url "https://jitpack.io"
+        }
+        maven { url "https://jitpack.io" }
     }
 
     dependencies {

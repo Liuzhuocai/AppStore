@@ -17,7 +17,6 @@ import cn.sharesdk.sina.weibo.SinaWeibo;
 import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.twitter.Twitter;
 import cn.sharesdk.wechat.friends.Wechat;
-import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 
 import static android.R.attr.action;
@@ -47,24 +46,9 @@ public class LoginPresenter implements PlatformActionListener, Handler.Callback 
 
     private void registerSms() {
 
-        SMSSDK.registerEventHandler(new EventHandler() {
-            public void afterEvent(int event, int result, Object data) {
-                if (result == SMSSDK.RESULT_COMPLETE) {
-                    // TODO 处理成功得到验证码的结果
-                    // 请注意，此时只是完成了发送验证码的请求，验证码短信还需要几秒钟之后才送达
-                    showToastFromCallback("发送成功");
-
-                } else{
-                    Log.d("liuzuo","event = "+event+"  data:"+data.toString());
-                    // TODO 处理错误的结果
-                    showToastFromCallback("手机号有误 result="+result);
-                }
-
-            }
-        });
 
         // 注册一个事件回调，用于处理提交验证码操作的结果
-        SMSSDK.registerEventHandler(new EventHandler() {
+       /* SMSSDK.registerEventHandler(new EventHandler() {
             public void afterEvent(int event, int result, Object data) {
                 if (result == SMSSDK.RESULT_COMPLETE) {
                     showToastFromCallback("验证成功");
@@ -74,7 +58,7 @@ public class LoginPresenter implements PlatformActionListener, Handler.Callback 
                 }
 
             }
-        });
+        });*/
 
     }
 
@@ -205,9 +189,11 @@ public class LoginPresenter implements PlatformActionListener, Handler.Callback 
                 Log.d("liuzuo","userName:"+userName);
                 Log.d("liuzuo","userIcon:"+userIcon);
                 Log.d("liuzuo","userGender:"+userGender);
+                Log.d("liuzuo","platform.getName():"+platform.getName());
                 //下面就可以利用获取的用户信息登录自己的服务器或者做自己想做的事啦!
                 //。。。
 
+                LoginSuccess(platform.getName());
             }
             break;
             case 2: { // 失败
@@ -238,6 +224,11 @@ public class LoginPresenter implements PlatformActionListener, Handler.Callback 
         }
         return false;
     }
+
+    private void LoginSuccess(String type) {
+        mLoginView.LoginSuccess(type);
+    }
+
     private void showToastFromCallback(String toastText){
         Message msg = new Message();
         msg.what = MSG_ACTION_CCALLBACK;

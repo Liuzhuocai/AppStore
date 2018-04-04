@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_country"
+    android:layout_width="match_parent"
+    android:layout_height="96dp"
+    android:padding="5dp"
+    android:orientation="horizontal"
+    android:background="@drawable/login_edit_divider"
+>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="4dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:text="@string/smssdk_country"
+        android:textColor="#000000"
+        android:textSize="22sp"
+    />
+    <TextView
+        android:id="@+id/tv_country"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="4dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:textColor="#000000"
+        android:text="@string/smssdk_country"
+        android:textSize="22sp"
+        android:drawableRight="@drawable/ic_arrow_gray_big"
+    />
+</LinearLayout>
