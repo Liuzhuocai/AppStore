@@ -71,6 +71,7 @@
     <string name="information_me_finish">完成</string>
 <!--主页-->
     <string name="more_item">更多</string>
+    <string name="appstore_down">下载</string>
 
     <!-- Error View -->
     <string name="error_view_click_to_refresh">点击屏幕,重新加载</string>

@@ -42,7 +42,7 @@ public class NetAppViewHolder extends CommonViewHolder<NetAppItem> {
                 .load(data.appItemInfo.getBigAppIcon())
                 .fit()
                 .centerCrop()
-                .placeholder(R.drawable.placeholder_loading)
+                .placeholder(R.drawable.timg)
                 .error(R.drawable.placeholder_error)
                 .into(appIcon);
         appName.setText(data.appItemInfo.getAppName());

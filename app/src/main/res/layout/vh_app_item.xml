@@ -53,6 +53,10 @@ android:paddingTop="10dp">
     android:layout_width="@dimen/app_item_hight"
     android:layout_height="@dimen/app_item_hight"
     android:layout_alignParentRight="true"
+    android:background="@null"
+    android:text="@string/appstore_down"
+    android:textColor="@color/colorPrimary"
+    android:textSize="20sp"
     android:layout_centerVertical="true" />
 
 </RelativeLayout>
